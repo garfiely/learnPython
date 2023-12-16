@@ -13,7 +13,7 @@ class TreeListener(ParseTreeListener):
 
     def enterEveryRule(self, ctx):
         if self.parent is not None:
-            self.G.add_edge(self.parent, ctx)
+            self.G.add_edge(self.parent, ctx.getText())
         self.parent = ctx
 
     def exitEveryRule(self, ctx):
@@ -23,6 +23,8 @@ def tree_to_graph(tree):
     listener = TreeListener()
     walker = ParseTreeWalker()
     walker.walk(listener, tree)
+#    print(listener.G.nodes())
+#    print(listener.G.edges())
     return listener.G
 
 def draw_graph(G):
@@ -43,6 +45,7 @@ tree = parser.startRule()  # 替换为你的语法文件中定义的开始规则
 
 # 打印语法树
 print(tree.toStringTree(recog=parser))
+print(tree.toJson(recog=parser))
 
 G = tree_to_graph(tree)
 draw_graph(G)
